@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
     body {
-      background-color: #fef8e7; /* Warna khas pastel soft biar matching */
+      background-color: #fef8e7;
       font-family: 'Segoe UI', system-ui, sans-serif;
     }
   </style>
@@ -78,8 +78,7 @@
           <img id="resultImage" src="" alt="Screenshot Result" class="hidden max-h-[350px] object-contain rounded-lg shadow-md border border-gray-200">
         </div>
 
-        <div id="responseData" class="hidden mt-4 p-3 bg-slate-900 rounded-xl text-[11px] font-mono text-emerald-400 overflow-x-auto max-h-[100px]">
-          </div>
+        <div id="responseData" class="hidden mt-4 p-3 bg-slate-900 rounded-xl text-[11px] font-mono text-emerald-400 overflow-x-auto max-h-[100px]"></div>
       </div>
 
     </main>
@@ -102,13 +101,11 @@
       const responseData = document.getElementById('responseData');
       const btnSubmit = document.getElementById('btnSubmit');
 
-      // Validasi kosong anjay
       if (!targetUrl) {
         alert('Bacot isi dulu URL-nya pea! 🫵🗿');
         return;
       }
 
-      // Atur Tampilan ke Loading State
       stateEmpty.classList.add('hidden');
       resultImage.classList.add('hidden');
       responseData.classList.add('hidden');
@@ -117,11 +114,9 @@
       btnSubmit.innerText = 'PROSESING... 🤔';
 
       try {
-        // Tembak langsung ke API Microlink sesuai dengan skema payload data yang lu kasih
         const isMobile = (device === 'Mobile');
         const apiUrl = `https://api.microlink.io?url=${encodeURIComponent(targetUrl)}&screenshot=true&embed=screenshot.url&screenshot.fullPage=true&screenshot.isMobile=${isMobile}`;
 
-        // Simulasi data response 200 OK untuk dummy manifest log biar mirip spek lu
         const responseLog = {
           "status": true,
           "message": "Success",
@@ -133,29 +128,23 @@
           }
         };
 
-        // Inject gambar langsung dari url response API
         resultImage.src = apiUrl;
 
-        // Pas gambar kelar di-load sama browser
         resultImage.onload = function() {
           stateLoading.classList.add('hidden');
           resultImage.classList.remove('hidden');
-          
-          // Tampilin JSON log biar makin keliatan pinter wkwkwk
           responseData.innerText = JSON.stringify(responseLog, null, 2);
           responseData.classList.remove('hidden');
-          
           btnSubmit.disabled = false;
           btnSubmit.innerText = 'Jalankan ⚡';
         };
 
-        // Handle kalau gambarnya gagal render atau error
         resultImage.onerror = function() {
-          throw new Error('Gagal nge-load gambar dari API endpoint.');
+          throw new Error('Error API');
         };
 
       } catch (error) {
-        alert('Wett bntr, error anjg! Coba cek link lu valid apa kaga.');
+        alert('Wett bntr, error anjg! Coba cek link lu.');
         stateLoading.classList.add('hidden');
         stateEmpty.classList.remove('hidden');
         btnSubmit.disabled = false;
@@ -163,6 +152,5 @@
       }
     }
   </script>
-
 </body>
 </html>
